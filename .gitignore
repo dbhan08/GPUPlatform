@@ -1,0 +1,83 @@
+# Build outputs
+build/
+out/
+cmake-build-*/
+*.exe
+*.dll
+*.lib
+*.exp
+*.pdb
+*.ilk
+*.obj
+*.o
+*.a
+
+# CUDA / OptiX artifacts
+*.ptx
+*.optixir
+*.cubin
+*.fatbin
+*.i
+*.ii
+
+# IDE / editor
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+CMakeSettings.json
+CMakeUserPresets.json
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Testing/
+_deps/
+compile_commands.json
+
+# Nsight
+*.nsys-rep
+*.qdrep
+*.qdstrm
+*.ncu-rep
+*.sqlite
+prof/
+
+# Datasets / renders (large binary outputs — keep out of git)
+datasets/
+renders/
+*.exr
+*.hdr
+*.png
+*.jpg
+!docs/**/*.png
+
+# Model artifacts
+*.onnx
+*.plan
+*.engine
+*.trt
+weights/
+checkpoints/
+
+# Python (for training scripts in the AI stages)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Scenes with binary assets — track manifests, not blobs
+scenes/**/*.bin
+scenes/**/*.glb
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Local overrides
+*.local
