@@ -10,6 +10,7 @@ add_executable(neuralrender
     src/main.cpp
     src/cudaContext.cpp
     src/optixContext.cpp
+    src/Window.cpp
 )
 
 
