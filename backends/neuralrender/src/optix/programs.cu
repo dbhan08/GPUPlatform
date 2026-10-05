@@ -7,7 +7,28 @@ extern "C" __constant__ LaunchParams optixLaunchParams;
 
 
 extern "C" __global__ void __miss__radiance()
-  { /*! for this simple example, this will remain empty */ }
+{
+    const uint3 launch_idx = optixGetLaunchIndex();
+
+    const float3 rayDirection = optixGetWorldRayDirection();
+
+    const float t = 0.5f * (rayDirection.y + 1.0f);
+
+    const float3 bottomColor = make_float3(1.0f, 1.0f, 1.0f);
+    const float3 topColor    = make_float3(0.5f, 0.7f, 1.0f);
+
+    const float3 color = make_float3(
+        (1.0f - t) * bottomColor.x + t * topColor.x,
+        (1.0f - t) * bottomColor.y + t * topColor.y,
+        (1.0f - t) * bottomColor.z + t * topColor.z
+    );
+
+    const unsigned int pixelIndex =
+        launch_idx.y * optixLaunchParams.width + launch_idx.x;
+
+    optixLaunchParams.frameBuffer[pixelIndex] =
+        make_float4(color.x, color.y, color.z, 1.0f);
+}
 
 
 extern "C" __global__ void __raygen__renderFrame() {
@@ -30,6 +51,7 @@ extern "C" __global__ void __raygen__renderFrame() {
 
   float3 rayDirection = imagePlanePoint - rayOrigin;
 
+  
   const float length = sqrtf(
           rayDirection.x * rayDirection.x +
           rayDirection.y * rayDirection.y +
