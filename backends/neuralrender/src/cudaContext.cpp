@@ -1,25 +1,5 @@
 #include "cudaContext.h"
-
-#include <cstdlib>
-#include <iostream>
-
-
-#define CU_CHECK(call)                                      \
-    do {                                                    \
-        CUresult result = call;                             \
-        if (result != CUDA_SUCCESS) {                       \
-            const char* name = nullptr;                     \
-            const char* message = nullptr;                  \
-            cuGetErrorName(result, &name);                  \
-            cuGetErrorString(result, &message);             \
-            std::cerr << "CUDA Driver error: "              \
-                      << (name ? name : "?")                 \
-                      << " - "                               \
-                      << (message ? message : "?")           \
-                      << std::endl;                          \
-            std::exit(1);                                   \
-        }                                                   \
-    } while (0)
+#include "errorCheck.h"
 
 
 CudaContext::CudaContext() {

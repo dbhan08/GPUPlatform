@@ -1,5 +1,39 @@
+
+
 cmake_minimum_required(VERSION 3.24)
 project(neuralrender LANGUAGES CXX CUDA)
+
+function(compile_optix_ir SOURCE OUTPUT_NAME)
+
+    set(OUTPUT_FILE
+        "${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_NAME}.optixir"
+    )
+
+    add_custom_command(
+        OUTPUT "${OUTPUT_FILE}"
+
+        COMMAND "${CMAKE_CUDA_COMPILER}"
+            --optix-ir
+            --relocatable-device-code=true
+            -I"${OPTIX_INCLUDE}"
+            -I"${PROJECT_INCLUDE}"
+            "${SOURCE}"
+            -o "${OUTPUT_FILE}"
+
+        DEPENDS
+            "${SOURCE}"
+            "${PROJECT_INCLUDE}/launchParams.h"
+
+        COMMENT "Compiling ${OUTPUT_NAME}.optixir"
+        VERBATIM
+    )
+
+    set(${OUTPUT_NAME}_OPTIX_IR
+        "${OUTPUT_FILE}"
+        PARENT_SCOPE
+    )
+
+endfunction()
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CUDA_STANDARD 20)
@@ -25,12 +59,37 @@ add_executable(neuralrender
     src/cudaContext.cpp
     src/optixContext.cpp
     src/Window.cpp
+    src/Renderer.cpp
+)
+
+set(OPTIX_INCLUDE
+    "C:/ProgramData/NVIDIA Corporation/OptiX SDK 9.1.0/include"
+)
+
+set(PROJECT_INCLUDE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+target_include_directories(neuralrender PRIVATE
+    "${PROJECT_INCLUDE}"
+    "${OPTIX_INCLUDE}"
 )
 
 
-target_include_directories(neuralrender PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "C:/ProgramData/NVIDIA Corporation/OptiX SDK 9.1.0/include"
+compile_optix_ir(
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/optix/programs.cu"
+    programs
+)
+
+add_custom_target(optix_programs
+    DEPENDS "${programs_OPTIX_IR}"
+)
+
+add_dependencies(neuralrender optix_programs)
+
+
+target_compile_definitions(neuralrender PRIVATE
+    NEURALRENDER_OPTIX_IR="${programs_OPTIX_IR}"
 )
 
 
