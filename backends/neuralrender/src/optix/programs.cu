@@ -49,9 +49,13 @@ extern "C" __global__ void __raygen__renderFrame() {
 
   const float3 imagePlanePoint = make_float3(u * aspectRatio, v, -1.0f);
 
-  float3 rayDirection = imagePlanePoint - rayOrigin;
+  float3 rayDirection = make_float3(
+    imagePlanePoint.x - rayOrigin.x,
+    imagePlanePoint.y - rayOrigin.y,
+    imagePlanePoint.z - rayOrigin.z
+  );
 
-  
+
   const float length = sqrtf(
           rayDirection.x * rayDirection.x +
           rayDirection.y * rayDirection.y +
