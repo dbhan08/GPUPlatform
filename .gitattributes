@@ -1,0 +1,6 @@
+# Normalize all text files to LF in the repo; checkouts still get platform-native EOLs.
+* text=auto eol=lf
+
+# Vendored third-party code: keep original bytes and omit from language stats.
+**/third_party/** linguist-vendored
+**/third_party/** -text

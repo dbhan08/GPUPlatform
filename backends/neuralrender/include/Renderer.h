@@ -3,6 +3,8 @@
 #include <cuda.h>
 #include <optix.h>
 
+#include <vector>
+
 #include "launchParams.h"
 
 class Renderer {
@@ -19,6 +21,7 @@ public:
     Renderer& operator=(const Renderer&) = delete;
 
     void render();
+    void downloadFramebuffer(std::vector<float4>& pixels);
 
     CUdeviceptr framebuffer() const { return d_framebuffer_; }
 

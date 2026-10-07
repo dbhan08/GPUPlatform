@@ -54,6 +54,14 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(glfw)
 
+add_library(glad_gl_core_46 STATIC
+    third_party/glad/src/gl.c
+)
+
+target_include_directories(glad_gl_core_46 PUBLIC
+    third_party/glad/include
+)
+
 add_executable(neuralrender
     src/main.cpp
     src/cudaContext.cpp
@@ -97,4 +105,5 @@ target_link_libraries(neuralrender PRIVATE
     CUDA::cuda_driver
     CUDA::cudart
     glfw
+    glad_gl_core_46
 )
